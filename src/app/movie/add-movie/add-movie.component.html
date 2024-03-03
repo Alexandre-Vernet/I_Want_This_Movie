@@ -1,0 +1,31 @@
+<ion-content class="ion-padding">
+    <ion-modal [isOpen]="isModalOpen">
+        <ng-template>
+            <ion-header>
+                <ion-toolbar>
+                    <ion-buttons slot="start">
+                        <ion-button (click)="cancel()">Cancel</ion-button>
+                    </ion-buttons>
+                    <ion-title>Add a movie</ion-title>
+                    <ion-buttons slot="end">
+                        <ion-button [disabled]="formAddMovie.invalid"
+                                    (click)="addMovie()" [strong]="true">
+                            Confirm
+                        </ion-button>
+                    </ion-buttons>
+                </ion-toolbar>
+            </ion-header>
+            <ion-content class="ion-padding">
+                <ion-item [formGroup]="formAddMovie">
+                    <ion-input
+                        label="Enter the name of the movie"
+                        labelPlacement="stacked"
+                        type="text"
+                        placeholder="Movie name"
+                        formControlName="name"
+                    ></ion-input>
+                </ion-item>
+            </ion-content>
+        </ng-template>
+    </ion-modal>
+</ion-content>
