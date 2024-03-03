@@ -1,3 +1,35 @@
-<p>
-    {{ movie.name }}
-</p>
+<ng-container *ngIf="{
+movies: movies$ | async,
+} as vm">
+    <ion-header [translucent]="true">
+        <ion-toolbar>
+            <ion-title>
+                Inbox
+            </ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content [fullscreen]="true">
+        <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+            <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+
+        <ion-header collapse="condense">
+            <ion-toolbar>
+                <ion-title size="large">
+                    Inbox
+                </ion-title>
+            </ion-toolbar>
+        </ion-header>
+
+        <ion-list>
+            <ng-container *ngFor="let movie of vm.movies">
+                <ion-item>
+                    <ion-label>{{ movie.name }}</ion-label>
+                </ion-item>
+            </ng-container>
+        </ion-list>
+        <ion-button (click)="openModalAddMovie = !openModalAddMovie">Add movie</ion-button>
+        <app-add-movie [isModalOpen]="openModalAddMovie"></app-add-movie>
+    </ion-content>
+</ng-container>

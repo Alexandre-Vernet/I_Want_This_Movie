@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { MovieService } from "../movie.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Movie, Status } from "../Movie";
@@ -9,7 +9,7 @@ import { IonModal } from "@ionic/angular";
     templateUrl: './add-movie.component.html',
     styleUrls: ['./add-movie.component.scss'],
 })
-export class AddMovieComponent implements OnInit {
+export class AddMovieComponent {
 
     @ViewChild(IonModal) modal: IonModal;
     @Input() isModalOpen = false;
@@ -22,10 +22,6 @@ export class AddMovieComponent implements OnInit {
     constructor(
         private readonly movieService: MovieService
     ) {
-    }
-
-    ngOnInit() {
-        console.log("isModalOpen", this.isModalOpen);
     }
 
     cancel() {

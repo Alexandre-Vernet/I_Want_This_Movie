@@ -1,19 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Movie } from "../Movie";
+import { Component } from '@angular/core';
+import { MovieService } from "../movie.service";
+import { RefresherCustomEvent } from "@ionic/angular";
 
 @Component({
-    selector: 'app-movie',
+    selector: 'app-list-movies',
     templateUrl: './list-movies.component.html',
     styleUrls: ['./list-movies.component.scss'],
 })
-export class ListMoviesComponent implements OnInit {
+export class ListMoviesComponent {
 
-    @Input() movie: Movie;
+    movies$ = this.movieService.getMovies();
+    openModalAddMovie = false;
 
-    constructor() {
+    constructor(
+        private readonly movieService: MovieService
+    ) {
     }
 
-    ngOnInit() {
+    refresh(ev: any) {
+        setTimeout(() => {
+            (ev as RefresherCustomEvent).detail.complete();
+        }, 3000);
     }
-
 }
