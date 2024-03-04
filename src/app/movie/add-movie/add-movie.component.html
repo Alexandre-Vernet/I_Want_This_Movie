@@ -9,7 +9,7 @@
                     <ion-title>Add a movie</ion-title>
                     <ion-buttons slot="end">
                         <ion-button [disabled]="formAddMovie.invalid"
-                                    (click)="addMovie()" [strong]="true">
+                                    (click)="buttonAddMovie$.next()" [strong]="true">
                             Confirm
                         </ion-button>
                     </ion-buttons>
@@ -22,9 +22,11 @@
                         labelPlacement="stacked"
                         type="text"
                         placeholder="Movie name"
-                        formControlName="name"
-                    ></ion-input>
+                        formControlName="name"></ion-input>
                 </ion-item>
+                <span *ngIf="!formAddMovie.valid && formAddMovie.touched"
+                      class="error-message">The name of the movie is required
+                </span>
             </ion-content>
         </ng-template>
     </ion-modal>

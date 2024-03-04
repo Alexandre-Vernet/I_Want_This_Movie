@@ -26,10 +26,12 @@ movies: movies$ | async,
             <ng-container *ngFor="let movie of vm.movies">
                 <ion-item>
                     <ion-label>{{ movie.name }}</ion-label>
+                    <span>{{ movie.creationDate  | date }}</span>
+                    <ion-button (click)="deleteMovie(movie.id)">Delete</ion-button>
                 </ion-item>
             </ng-container>
         </ion-list>
         <ion-button (click)="openModalAddMovie = !openModalAddMovie">Add movie</ion-button>
-        <app-add-movie [isModalOpen]="openModalAddMovie"></app-add-movie>
+        <app-add-movie [isModalOpen]="openModalAddMovie" (addNewMovie)="addNewMovie()"></app-add-movie>
     </ion-content>
 </ng-container>

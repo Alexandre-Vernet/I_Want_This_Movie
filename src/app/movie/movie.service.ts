@@ -23,4 +23,8 @@ export class MovieService {
     addMovie(movie: Movie): Observable<Movie> {
         return this.http.post<Movie>(this.movieUrl, movie);
     }
+
+    deleteMovie(movieId: string): Observable<Movie> {
+        return this.http.delete<Movie>(`${this.movieUrl}/${movieId}`);
+    }
 }

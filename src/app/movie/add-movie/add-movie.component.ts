@@ -1,18 +1,23 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MovieService } from "../movie.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Movie, Status } from "../Movie";
 import { IonModal } from "@ionic/angular";
+import { BehaviorSubject, distinctUntilChanged, filter, Subject, switchMap, takeUntil } from "rxjs";
 
 @Component({
     selector: 'app-add-movie',
     templateUrl: './add-movie.component.html',
     styleUrls: ['./add-movie.component.scss'],
 })
-export class AddMovieComponent {
+export class AddMovieComponent implements OnInit, OnDestroy {
 
     @ViewChild(IonModal) modal: IonModal;
     @Input() isModalOpen = false;
+    @Output() addNewMovie: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+    buttonAddMovie$: BehaviorSubject<void> = new BehaviorSubject<void>(null);
+    unsubscribe$: Subject<void> = new Subject<void>;
 
     formAddMovie = new FormGroup({
         name: new FormControl('', [Validators.required]),
@@ -24,18 +29,37 @@ export class AddMovieComponent {
     ) {
     }
 
-    cancel() {
-        this.modal.dismiss(null, 'cancel');
+    ngOnInit() {
+        this.buttonAddMovie$.pipe(
+            distinctUntilChanged(),
+            takeUntil(this.unsubscribe$),
+            filter(() => this.formAddMovie.valid),
+            switchMap(() => {
+                const {name, status} = this.formAddMovie.value;
+                const newMovie: Movie = {
+                    name,
+                    status,
+                    creationDate: new Date(),
+                }
+                return this.movieService.addMovie(newMovie);
+            })
+        ).subscribe({
+            next: () => {
+                this.formAddMovie.reset();
+                this.addNewMovie.emit(true);
+            },
+            error: (err) => {
+                console.error(err);
+            }
+        });
     }
 
-    addMovie() {
-        const {name, status} = this.formAddMovie.value;
-        console.log(name, status)
-        const movie: Movie = {
-            name,
-            status,
-            creationDate: new Date(),
-        }
-        this.movieService.addMovie(movie).subscribe();
+    ngOnDestroy() {
+        this.unsubscribe$.next();
+        this.unsubscribe$.complete();
+    }
+
+    cancel() {
+        this.modal.dismiss(null, 'cancel');
     }
 }
