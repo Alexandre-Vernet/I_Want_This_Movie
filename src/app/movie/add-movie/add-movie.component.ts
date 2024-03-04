@@ -45,7 +45,7 @@ export class AddMovieComponent implements OnInit, OnDestroy {
             })
         ).subscribe({
             next: () => {
-                this.formAddMovie.reset();
+                this.formAddMovie.get('name').reset();
                 this.addNewMovie.emit(true);
             },
             error: (err) => {
